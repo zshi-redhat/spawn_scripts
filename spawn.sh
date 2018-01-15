@@ -35,15 +35,15 @@ image_dir='/var/lib/libvirt/images'
 vm_image_name="${vm_name}.qcow2"
 base_image_name="${distro}-base.qcow2"
 
+yum install libvirt qemu-kvm virt-manager virt-install libguestfs-tools -y
+systemctl enable libvirtd && systemctl start libvirtd
+yum -y install libguestfs-xfs
+
 if [ ${distro} = 'centos' ]; then
     wget -nc -O ${image_dir}/${base_image_name} https://cloud.centos.org/centos/7/images/CentOS-7-x86_64-GenericCloud.qcow2
 elif [ ${distro} = 'rhel' ]; then
     cp -n /opt/rhel_guest_images/rhel-guest-image-7.4.qcow2 ${image_dir}/${base_image_name}
 fi
-
-yum install libvirt qemu-kvm virt-manager virt-install libguestfs-tools -y
-systemctl enable libvirtd && systemctl start libvirtd
-yum -y install libguestfs-xfs
 
 qemu-img create -f qcow2 ${image_dir}/${vm_image_name} 50G
 virt-resize --expand /dev/sda1 ${image_dir}/${base_image_name} ${image_dir}/${vm_image_name}
