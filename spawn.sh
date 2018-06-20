@@ -43,6 +43,8 @@ if [ ${distro} = 'centos' ]; then
     wget -nc -O ${image_dir}/${base_image_name} https://cloud.centos.org/centos/7/images/CentOS-7-x86_64-GenericCloud.qcow2
 elif [ ${distro} = 'rhel' ]; then
     cp -n /opt/rhel_guest_images/rhel-guest-image-7.4.qcow2 ${image_dir}/${base_image_name}
+elif [ ${distro} = 'fedora' ]; then
+    wget -nc -O ${image_dir}/${base_image_name} https://download.fedoraproject.org/pub/fedora/linux/releases/28/Cloud/x86_64/images/Fedora-Cloud-Base-28-1.1.x86_64.qcow2
 fi
 
 qemu-img create -f qcow2 ${image_dir}/${vm_image_name} 50G
