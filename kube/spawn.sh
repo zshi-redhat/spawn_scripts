@@ -2,7 +2,7 @@
 
 cd $HOME
 
-PCKAGE_TOOLS="vim git wget net-tools"
+PACKAGE_TOOLS="vim git wget net-tools pciutils"
 yum install -y $PACKAGE_TOOLS
 
 # Install docker
