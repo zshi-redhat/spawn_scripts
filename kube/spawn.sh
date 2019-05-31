@@ -43,7 +43,7 @@ kubeadm init --pod-network-cidr=10.244.0.0/16
 
 if [ $? == 0 ]; then
 	mkdir -p $HOME/.kube
-	sudo cp -i /etc/kubernetes/admin.conf $HOME/.kube/config
+	sudo cp -rf /etc/kubernetes/admin.conf $HOME/.kube/config
 	sudo chown $(id -u):$(id -g) $HOME/.kube/config
 fi
 
@@ -67,11 +67,11 @@ git clone https://github.com/intel/sriov-network-device-plugin.git
 # Build and Copy multus/sriov binaries
 cd $HOME/multus-cni
 ./build
-cp bin/multus /opt/cni/bin
+cp -rf bin/multus /opt/cni/bin
 
 cd $HOME/sriov-cni
 make build
-cp build/sriov /opt/cni/bin
+cp -rf build/sriov /opt/cni/bin
 
 cd $HOME/sriov-network-device-plugin
 make build
