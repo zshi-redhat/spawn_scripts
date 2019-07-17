@@ -38,6 +38,9 @@ yum install -y kubelet kubeadm kubectl --disableexcludes=kubernetes
 # Enable & Start kubelet
 systemctl enable --now kubelet
 
+# Empty old etcd folder
+rm -rf /var/lib/etcd/*
+
 # Run kubeadm init
 kubeadm init --pod-network-cidr=10.244.0.0/16
 
