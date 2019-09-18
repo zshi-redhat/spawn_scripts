@@ -6,7 +6,7 @@ cd $HOME
 setenforce 0
 sed -i 's/^SELINUX=enforcing$/SELINUX=permissive/' /etc/selinux/config
 
-PACKAGE_TOOLS="vim git wget net-tools pciutils"
+PACKAGE_TOOLS="vim git wget net-tools pciutils make containernetworking-plugins flannel"
 yum install -y $PACKAGE_TOOLS
 
 # Install docker
@@ -72,6 +72,7 @@ git clone https://github.com/intel/sriov-network-device-plugin.git
 
 # Build and Copy multus/sriov binaries
 mkdir -p /opt/cni/bin
+cp -rf /usr/libexec/cni/* /opt/cni/bin/
 
 cd $HOME/multus-cni
 ./build
