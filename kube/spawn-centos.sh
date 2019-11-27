@@ -44,6 +44,9 @@ systemctl enable --now kubelet
 # Empty old etcd folder
 rm -rf /var/lib/etcd/*
 
+# enable bridge nf call
+sysctl net.bridge.bridge-nf-call-iptables=1
+
 # Run kubeadm init
 kubeadm init --pod-network-cidr=10.244.0.0/16
 
@@ -75,8 +78,10 @@ mkdir -p /opt/cni/bin
 cp -rf /usr/libexec/cni/* /opt/cni/bin/
 
 cd $HOME/multus-cni
+export GO111MODULE=off
 ./build
 cp -rf bin/multus /opt/cni/bin
+export GO111MODULE=outo
 
 cd $HOME/sriov-cni
 make build
@@ -108,12 +113,12 @@ EOF
 # Sleep 5 seconds to wait for node ready
 sleep 5
 
-# Create sriov device plugin config dir
+# Create sriov device plugin config
 mkdir -p /etc/pcidp
-cp -rf $HOME/sriov-network-device-plugin/deployments/config.json /etc/pcidp/
+kubectl create -f $HOME/sriov-network-device-plugin/deployments/configMap.yaml
 
 kubectl taint nodes --all node-role.kubernetes.io/master-
 
 # Create network-attachment-definition CRD
-kubectl create -f $HOME/sriov-network-device-plugin/deployments/crdnetwork.yaml
+kubectl create -f $HOME/multus-cni/examples/crd.yml
 kubectl create -f $HOME/sriov-network-device-plugin/deployments/sriov-crd.yaml
