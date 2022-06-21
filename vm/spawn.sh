@@ -40,7 +40,7 @@ systemctl enable libvirtd && systemctl start libvirtd
 yum -y install libguestfs-xfs
 
 if [ ${distro} = 'centos' ]; then
-    wget -nc -O ${image_dir}/${base_image_name} https://cloud.centos.org/centos/7/images/CentOS-7-x86_64-GenericCloud.qcow2
+    wget -nc -O ${image_dir}/${base_image_name} https://cloud.centos.org/centos/8-stream/x86_64/images/CentOS-Stream-GenericCloud-8-20220125.1.x86_64.qcow2
 elif [ ${distro} = 'rhel' ]; then
     cp -n /opt/rhel_guest_images/rhel-guest-image-7.4.qcow2 ${image_dir}/${base_image_name}
 elif [ ${distro} = 'fedora' ]; then
@@ -56,11 +56,13 @@ virt-customize -a ${image_dir}/${vm_image_name} --run-command "echo ${vm_name} >
 cat << EOF > ./ifcfg-eth0
 DEVICE="eth0"
 ONBOOT="yes"
+BOOTPROTO=static
+NAME="eth0"
 TYPE="Ethernet"
 IPADDR=192.168.122.${IP}
 NETMASK=255.255.255.0
 GATEWAY=192.168.122.1
-NM_CONTROLLED=no
+NM_CONTROLLED=yes
 DNS1=192.168.122.1
 EOF
 virt-customize -a ${image_dir}/${vm_image_name} --upload ./ifcfg-eth0:/etc/sysconfig/network-scripts/ifcfg-eth0
