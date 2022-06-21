@@ -68,6 +68,20 @@ EOF
 virt-customize -a ${image_dir}/${vm_image_name} --upload ./ifcfg-eth0:/etc/sysconfig/network-scripts/ifcfg-eth0
 rm -rf ./ifcfg-eth0
 
+
+cat << EOF > ./install.sh
+#!/bin/bash
+
+yum install -y vim make net-tools bind-utils git golang
+curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.46.2
+
+echo "export PATH=$PATH:/root/go/bin" >> ~/.bashrc
+EOF
+
+chmod a+x ./install.sh
+virt-customize -a ${image_dir}/${vm_image_name} --upload ./ifcfg-eth0:/root/install.sh
+rm -rf ./install.sh
+
 virt-install --ram 16384 --vcpus 4 \
 --disk path=${image_dir}/${vm_image_name},device=disk,bus=virtio,format=qcow2 \
 --import --noautoconsole --vnc \
