@@ -79,7 +79,7 @@ echo "export PATH=$PATH:/root/go/bin" >> ~/.bashrc
 EOF
 
 chmod a+x ./install.sh
-virt-customize -a ${image_dir}/${vm_image_name} --upload ./ifcfg-eth0:/root/install.sh
+virt-customize -a ${image_dir}/${vm_image_name} --upload ./install.sh:/root/install.sh
 rm -rf ./install.sh
 
 virt-install --ram 16384 --vcpus 4 \
